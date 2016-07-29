@@ -1,4 +1,4 @@
-package main
+package keys
 
 import (
 	"math/big"
@@ -55,7 +55,7 @@ func (pubkey *PublicKey) generateBitcoinAddress() (address string) {
 	return address
 }
 
-func (pubkey *PublicKey) processHash() (hash string) {
+func (pubkey *PublicKey) processHash() ([]byte) {
 
 	/* Convert the public key to bytes */
 	pub_bytes := pubkey.ToBytesUncompressed()
@@ -252,6 +252,19 @@ func b58decode(s string) (b []byte, err error) {
 	return b, nil
 }
 
+func generateKeyPair() (privatekey *ecdsa.PrivateKey)  {
+
+	pubkeyCurve := elliptic.P256() //see http://golang.org/pkg/crypto/elliptic/#P256
+	privatekey, err := ecdsa.GenerateKey(pubkeyCurve, rand.Reader) // this generates a public & private key pair
+
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	return privatekey
+}
+
 func testkey() {
 
 	pubkeyCurve := elliptic.P256() //see http://golang.org/pkg/crypto/elliptic/#P256
@@ -300,3 +313,7 @@ func testkey() {
 }
 
 
+
+func main() {
+	fmt.Println("Hello World from keys")
+}
